@@ -50,15 +50,11 @@ const ItemCtrl = (() => {
     data: () => {
       return data;
     },
-    
   };
 })();
 
-
-
 let questionCount = 0;
 const UICtrl = (() => {
-
   return {
     getData: () => {
       const data = ItemCtrl.data();
@@ -92,83 +88,80 @@ const UICtrl = (() => {
   };
 })();
 
-const AppCtrl = ((ItemCtrl, UICtrl)=>{
+const AppCtrl = ((ItemCtrl, UICtrl) => {
+  const loadEvents = () => {
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelector(".text-primary").style.display = "";
+    });
+    document.querySelector("#submit").addEventListener("click", startQuiz);
+    document
+      .querySelector("#submit-btn")
+      .addEventListener("click", submitAnswer);
+  };
 
-const loadEvents = ()=>{
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelector(".text-primary").style.display = "";
-  });
-  document.querySelector("#submit").addEventListener("click", startQuiz);
-  document.querySelector("#submit-btn").addEventListener("click", submitAnswer);
+  let score = 0;
+  let secs = 60;
+  // Get question from the data object
+  const data = ItemCtrl.data();
 
-}
-
-let score = 0;
-let secs = 60;
-// Get question from the data object
-const data = ItemCtrl.data();
-
-function getSeconds() {
-  secs--;
-  if (secs < 1 ) {
-    window.clearInterval(interval);
-    const cardBody = document.querySelector(".card-body");
-    cardBody.innerHTML = `You scored ${score} out of ${data.length}.`
-    cardBody.style.textAlign = 'center';
-    cardBody.style.fontSize = '20px';
-  }else{
-  document.querySelector(".time").textContent = `0:${secs}`;
-  }
-}
-function startQuiz(e) {
-  // Set time interval of 1 second
-  interval = setInterval(getSeconds, 1000);
-  // Display Submit button
-  document.querySelector("#submit-btn").style.display = "block";
-  // Hide Start quiz button
-  document.querySelector("#submit").style.display = "none";
-  // Hide the first text from UI
-  document.querySelector(".text-primary").style.display = "none";
-  // Display the first question 
-  UICtrl.getData();
-  e.preventDefault();
-}
-function submitAnswer() {
-  
-  // Get the id of the checked option from UI
-  const answer = UICtrl.getOptionId();
- 
-  // If an answer is selected and seconds is greater than 1
-  if (answer && secs > 1) {
-    // If the id of the selected answer is equal to the question id
-    if (answer === data[questionCount].correctAnswer) {
-      score++;
-      
-    }
-    questionCount++;
-    if (questionCount < data.length) {
-      UICtrl.getData();
-    } else {
+  function getSeconds() {
+    secs--;
+    if (secs < 1) {
       window.clearInterval(interval);
       const cardBody = document.querySelector(".card-body");
-      cardBody.innerHTML = `You scored ${score} out of ${data.length}.`;
-      cardBody.style.textAlign = 'center';
-      cardBody.style.fontSize = '20px';
-      
+      cardBody.innerHTML = `<p>Time's up</p> <h3>You scored ${score} out of ${data.length}.</h3>`;
+      cardBody.style.textAlign = "center";
+      cardBody.style.fontSize = "20px";
+    } else {
+      document.querySelector(".time").textContent = `0:${secs}`;
     }
-  } else {
-    const cardBody = document.querySelector(".card-body");
-    cardBody.innerHTML = `You scored ${score} out of ${data.length}.`;
-    cardBody.style.textAlign = 'center';
-    cardBody.style.fontSize = '20px';
   }
-}
+  function startQuiz(e) {
+    // Set time interval of 1 second
+    interval = setInterval(getSeconds, 1000);
+    // Display Submit button
+    document.querySelector("#submit-btn").style.display = "block";
+    // Hide Start quiz button
+    document.querySelector("#submit").style.display = "none";
+    // Hide the first text from UI
+    document.querySelector(".text-primary").style.display = "none";
+    // Display the first question
+    UICtrl.getData();
+    e.preventDefault();
+  }
+  function submitAnswer() {
+    // Get the id of the checked option from UI
+    const answer = UICtrl.getOptionId();
 
-return{
-  init: ()=>{
-    loadEvents()
+    // If an answer is selected and seconds is greater than 1
+    if (answer && secs > 1) {
+      // If the id of the selected answer is equal to the question id
+      if (answer === data[questionCount].correctAnswer) {
+        score++;
+      }
+      questionCount++;
+      if (questionCount < data.length) {
+        UICtrl.getData();
+      } else {
+        window.clearInterval(interval);
+        const cardBody = document.querySelector(".card-body");
+        cardBody.innerHTML = `You completed all the questions. Well done! <h3>Your score is ${score} out of ${data.length}.</h3>`;
+        cardBody.style.textAlign = "center";
+        cardBody.style.fontSize = "20px";
+      }
+    } else {
+      const cardBody = document.querySelector(".card-body");
+      cardBody.innerHTML = `<p>Time's up</p> <h3>You scored ${score} out of ${data.length}.</h3>`;
+      cardBody.style.textAlign = "center";
+      cardBody.style.fontSize = "20px";
+    }
   }
-}
+
+  return {
+    init: () => {
+      loadEvents();
+    },
+  };
 })(ItemCtrl, UICtrl);
 
 AppCtrl.init();
