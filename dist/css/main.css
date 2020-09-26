@@ -30,14 +30,19 @@
 
 .card {
   width: 400px;
+  position: relative;
   margin: auto;
   padding: 2rem;
   margin-top: 30vh;
   margin-bottom: 1rem;
-  box-shadow: 2px 2px 2px 3px #dddddd, -2px -2px 2px 3px #dddddd; }
-  .card .time {
-    display: float;
-    float: right; }
+  box-shadow: 1px 1px 1px 1px #dddddd, -1px -1px 1px 1px #dddddd; }
+  .card-body {
+    padding-top: 1rem;
+    position: relative; }
+    .card-body .time {
+      position: absolute;
+      top: 0;
+      right: 0; }
   .card ul li {
     list-style: none;
     padding: 0.6rem; }
@@ -47,4 +52,4 @@
 @media (max-width: 560px) {
   .card {
     width: 300px;
-    padding: .2rem; } }
+    padding: 0.2rem; } }

@@ -33,19 +33,28 @@
 .card {
   width: 400px;
   // height: 300px;
+  position: relative;
   margin: auto;
   padding: 2rem;
   margin-top: 30vh;
   margin-bottom: 1rem;
-  box-shadow: 2px 2px 2px 3px #dddddd, -2px -2px 2px 3px #dddddd;
-  .time {
-    display: float;
-    float: right;
+  box-shadow: 1px 1px 1px 1px #dddddd, -1px -1px 1px 1px #dddddd;
+  &-body {
+    padding-top: 1rem;
+    position: relative;
+    .time {
+      position: absolute;
+      top: 0;
+      right: 0;
+      // display: float;
+      // float: right;
+    }
   }
   ul {
     li {
       list-style: none;
       padding: 0.6rem;
+
       input {
         cursor: pointer;
       }
@@ -53,9 +62,9 @@
   }
 }
 
-@media (max-width:560px){
-  .card{
-    width:300px;
-    padding: .2rem;
+@media (max-width: 560px) {
+  .card {
+    width: 300px;
+    padding: 0.2rem;
   }
 }
